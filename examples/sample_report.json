@@ -1,0 +1,29 @@
+{
+  "process": "Company Incorporation",
+  "documents_uploaded": 2,
+  "required_documents": 7,
+  "missing_documents": [
+    "Memorandum of Association",
+    "Board Resolution",
+    "Shareholder Resolution",
+    "UBO Declaration",
+    "Register of Members and Directors"
+  ],
+  "issues_found": [
+    {
+      "document": "Articles of Association",
+      "file_name": "AoA_example.docx",
+      "section": "Jurisdiction",
+      "issue": "Jurisdiction clause does not specify ADGM",
+      "severity": "High",
+      "suggestion": "Specify that disputes are subject to ADGM Courts jurisdiction and governed by ADGM Regulations.",
+      "references": [
+        {
+          "title": "ADGM Companies Regulations 2020 (Notes)",
+          "source": "data/reference/adgm_companies_regulations.md",
+          "score": 0.0
+        }
+      ]
+    }
+  ]
+}

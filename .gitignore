@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.coverage*
+
+# Environments
+.venv/
+.env
+.env.*
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project outputs
+out/
+logs/
+
+# Retrieved data cache
+data/external/
+
+# Editors/IDE
+.vscode/
+.idea/
