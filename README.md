@@ -1,12 +1,19 @@
 # ADGM Corporate Agent (Document Intelligence)
 
-A minimal Streamlit-based AI assistant that:
-- Accepts `.docx` uploads
-- Classifies document type
-- Verifies required checklist for ADGM processes (Company Incorporation, Licensing)
-- Detects red flags and inserts inline review comments into the `.docx`
-- Uses simple local RAG over reference notes; optionally calls an LLM for clause suggestions
-- Outputs a downloadable reviewed `.docx` and a structured JSON report
+An AI-powered reviewer for ADGM corporate documents. It checks completeness against ADGM checklists, flags red flags, inserts comments into `.docx`, and produces a structured report.
+
+## Key Features
+
+- **.docx upload and parsing**: Upload one or more `.docx` files; text is parsed from paragraphs and tables.
+- **Auto document typing**: Heuristic classifier maps files to types (AoA, MoA, Board/Shareholder Resolution, Application, UBO, Registers, etc.).
+- **Process inference**: Infers likely process (e.g., Company Incorporation) from the uploaded set; you can override.
+- **Checklist verification**: Compares present document types against the required ADGM checklist and shows missing items.
+- **Red-flag detection**: Heuristics for ADGM jurisdiction, ambiguous language, execution sections, AoA share capital, length sanity, and more.
+- **Inline review notes**: Adds Word comments where supported; otherwise adds inline reviewer notes in the document.
+- **RAG grounding**: Uses a TF‑IDF retriever over `data/reference/` and optional “official links” you paste to ground findings and suggestions with citations/snippets.
+- **Optional LLM suggestions**: If `OPENAI_API_KEY` is set, generates concise clause fixes aligned with ADGM context.
+- **Downloadables**: One reviewed `.docx` per upload, plus a consolidated JSON report capturing process, counts, missing docs, and issues.
+- **Headless CLI**: Script to review a folder of `.docx` files and save outputs without the UI.
 
 ## Quickstart
 
@@ -33,6 +40,12 @@ streamlit run app.py
 
 Open the local URL shown in the terminal.
 
+### Optional: URL ingestion for grounding
+
+- Expand “Optional: Add official ADGM links” in the app
+- Paste one URL per line (HTML / PDF / DOCX) from official sources
+- Click “Fetch & Index Links” to add them to the retriever
+
 ## Usage
 
 - Upload one or more `.docx` files
@@ -41,13 +54,54 @@ Open the local URL shown in the terminal.
 - Review checklist results and issues
 - Download the reviewed `.docx` files and JSON report
 
+## Screenshots (Overview)
+
+1) Dashboard and uploads
+
+![Dashboard](Screenshots/Dashboard.png)
+
+- Upload `.docx` files, see detected types, and confirm/override the inferred process.
+
+2) Checklist verification
+
+![Checklist verification](Screenshots/Checklist verification.png)
+
+- Shows how many required documents are present vs. missing for the selected ADGM process.
+
+3) Reviewed documents and JSON report
+
+![Reviewed docs](Screenshots/Reviewed docs.png)
+
+- Download the marked-up `.docx` files with inline comments/notes and the consolidated JSON report.
+
+4) Example test run
+
+![Example test run](Screenshots/example test run.png)
+
+- Demonstrates end-to-end flow with sample documents provided in `examples/`.
+
 ## Reference Data (RAG)
 
 Place your ADGM reference notes in `data/reference/*.txt` or `*.md`. A simple TF-IDF retriever surfaces the most relevant notes per issue.
 
+You can also paste official ADGM URLs in the UI. The app fetches and extracts text from HTML/PDF/DOCX and extends the retriever with these sources.
+
 ## Example Files
 
 - Add an example source `.docx` and the corresponding reviewed version into `examples/` after running the app for demo purposes.
+
+Generate basic examples:
+
+```bash
+python scripts/generate_sample_docx.py
+```
+
+Headless review of a folder:
+
+```bash
+$env:PYTHONPATH = (Get-Location).Path
+python scripts/review_folder.py review examples --out out
+```
 
 ## Submission Checklist
 
